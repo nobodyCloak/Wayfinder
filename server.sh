@@ -1,14 +1,14 @@
 #!/bin/bash
-sudo add-apt-repository -y ppa:webupd8team/java
-sudo apt-get update
-sudo apt-get -y install oracle-java8-installer
-wget -q0 - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-echo "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main" | sudo tee -a /etc/apt/sources.list.d/elasticsearch-2.x.list
-sudo apt-get update
-sudo apt-get -y install elasticsearch
+# add 'deb http://deb.debian.org/debian sid main' to /etc/apt/sources.list
+echo "deb http://deb.debian.org/debian sid main" | sudo tee -a /etc/apt/sources.list.d/debian_sid_main.list
+sudo apt-get update && sudo apt-get -y install openjdk-8-jre
+wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+sudo apt-get install apt-transport-https
+echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
+sudo apt-get update && sudo apt-get install -y elasticsearch
 
 # sudo vi /etc/elasticsearch/elasticsearch.yml
-# need to uncomment line that specifies network.host and replace value with 'localhost'
+# need to uncomment line that specifies network.host and replace value with 'localhost'?
 
 sudo service elasticsearch restart
 # systemctl instead?
