@@ -1,7 +1,6 @@
 #!/bin/bash
-# add 'deb http://deb.debian.org/debian sid main' to /etc/apt/sources.list
-echo "deb http://deb.debian.org/debian sid main" | sudo tee -a /etc/apt/sources.list.d/debian_sid_main.list
-sudo apt-get update && sudo apt-get -y install openjdk-8-jre
+# echo "deb http://deb.debian.org/debian sid main" | sudo tee -a /etc/apt/sources.list.d/debian_sid_main.list
+sudo apt-get update # && sudo apt-get -y install openjdk-8-jre
 wget -qO - https://artifacts.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
 sudo apt-get install apt-transport-https
 echo "deb https://artifacts.elastic.co/packages/7.x/apt stable main" | sudo tee -a /etc/apt/sources.list.d/elastic-7.x.list
@@ -15,18 +14,14 @@ sudo service elasticsearch restart
 
 sudo update-rc.d elasticsearch defaults 95 10
 
-echo "deb http://packages.elastic.co/kibana/4.5/debian stable main" | sudo tee -a /etc/apt/sources.list.d/kibana-4.5.x.list
-
-sudo apt-get update
 sudo apt-get -y install kibana
-
-# sudo vi /opt/kibana/config/kibana.yml
-# edit line that specifies server.host and replace it with '"localhost"'
+# sudo vi /etc/kibana/kibana.yml
+# uncomment line that specifies 'server.host: "localhost"'
 sudo update-rc.d kibana defaults 96 9
 sudo service kibana start
 
 
-sudo apt-get install nginx apache2-utils
+sudo apt-get install -y nginx apache2-utils
 sudo htpasswd -c /etc/nginx/htpasswd.users kibanaadmin
 
 # enter password
@@ -53,6 +48,9 @@ server {
 }
 >>
 
+# sudo ln -s /etc/nginx/sites-available/server_ip_address /etc/nginx/sites-enabled/server_ip_address
+# sudo nginx -t
+# possibly necessary to remove /etc/nginx/sites-enabled/default and /etc/nginx/sites-available/default
 sudo service nginx restart
 echo 'deb http://packages.elastic.co/logstash/2.2/debian stable main' | sudo tee /etc/apt/sources.list.d/logstash-2.2.x.list
 sudo apt-get update
